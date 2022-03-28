@@ -19,6 +19,9 @@ const User = new mongoose.Schema({
     mobile: {
         type: Number
     },
+    address: {
+        type: String
+    },
     group: {
         type: String,
         default: "customer",

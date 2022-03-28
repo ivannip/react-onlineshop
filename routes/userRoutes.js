@@ -18,8 +18,9 @@ router.use((req, res, next) => {
   });
 
 router.post("/register", (req, res, next) => {
-    User.register(new User({username: req.body.username, name: req.body.name, mobile: req.body.mobile, group: req.body.group}), 
-    req.body.password, (err, user) => {
+    
+    const newUser = new User({username: req.body.username, name: req.body.name, mobile: req.body.mobile, address: req.body.address, group: req.body.group});
+    User.register(newUser, req.body.password, (err, user) => {
         if (err) {
             res.statusCode = 500;
             res.send(err);
@@ -27,14 +28,15 @@ router.post("/register", (req, res, next) => {
             const token = getToken({_id: user._id});
             const refreshToken = getRefreshToken({_id: user._id});
             user.refreshToken.push({refreshToken});
-            user.save((err, user) => {
-                const userId = user._id;
+            user.save((err, savedUser) => {
                 if (err) {
                     res.statusCode = 500;
                     res.send(err)
                 } else {
+                    const userId = savedUser._id;
+                    const userInfo = {name: savedUser.name, mobile: savedUser.mobile, group: savedUser.group, address: savedUser.address};                 
                     res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-                    res.send({success: true, token, userId});
+                    res.send({success: true, token, userId, userInfo:userInfo});
                 }
             })
         }
@@ -45,7 +47,6 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
     const userId = req.user._id;
     const token = getToken({_id: userId});
     const refreshToken = getRefreshToken({_id: userId});
-    console.log(refreshToken);
     User.findById(userId, (err, user) => {
         if (err) {
             next(err);
@@ -56,13 +57,20 @@ router.post("/login", passport.authenticate("local"), (req, res, next) => {
                     res.statusCode = 500;
                     res.send(err);
                 } else {
+                    const userInfo = {name: savedUser.name, mobile: savedUser.mobile, group: savedUser.group, address: savedUser.address};
                     res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-                    res.send({success: true, token, userId});
+                    res.send({success: true, token, userId, userInfo: userInfo});
                 }
             })
         }
     })
 })
+
+router.get("/loginInfo", verifyUser, (req,res) => {
+  User.findById(req.user._id, (err, foundUser) => {
+    !err?res.send(foundUser):res.send(err);
+  })
+});
 
 router.get("/logout", verifyUser, (req, res, next) => {
     const { signedCookies = {} } = req;

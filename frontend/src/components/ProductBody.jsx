@@ -33,6 +33,7 @@ function ProductBody() {
         }
 
         fetchProduct();
+        
     }, [])
 
     return (
