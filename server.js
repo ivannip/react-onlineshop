@@ -8,6 +8,7 @@ const path = require("path");
 const productRoute = require("./routes/productRoutes");
 const orderRoute = require("./routes/orderRoutes");
 const userRouter = require("./routes/userRoutes");
+const mqRouter = require("./routes/mqRoutes");
 
 const PORT = process.env.PORT || "3001";
 
@@ -31,6 +32,7 @@ app.use("/user", userRouter);
 
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
+app.use("/msg", mqRouter);
 
 //Setup Database Connection
 const LOCAL_DB = "mongodb://127.0.0.1:27017/tdecDB";

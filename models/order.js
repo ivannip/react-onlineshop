@@ -17,6 +17,10 @@ const orderSchema = new mongoose.Schema({
     createDate: Date,
     deliveryDate: Date,
     deliveryAddress: String,
+    status: {
+        type: String,
+        default: "pending"
+    },
     purchasedItems: [transactionSchema]
 })
 

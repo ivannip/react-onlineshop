@@ -54,4 +54,19 @@ router.patch("/update", (req, res) => {
     })
 });
 
+router.post("/amends" , (req, res) => {
+    const {purchasedItems} = req.body;
+    const _error = false
+    let quantity = 0;
+    purchasedItems.forEach(item => {
+        quantity = parseInt(item.quantity);
+        Product.findByIdAndUpdate(item.product, {$inc: {inventory: -quantity}}, (err, updated) => {
+            if (err) {
+                _error = true;
+            }
+        })
+    });
+    _error?res.send("inventory change failed"):res.send("update success");
+})
+
 module.exports = router;

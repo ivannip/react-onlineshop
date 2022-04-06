@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require("axios");
 const Order = require("../models/order");
 const router = express.Router();
 
@@ -15,22 +16,29 @@ router.use((req, res, next) => {
   });
 
 router.post("/new", (req, res) => {
-    console.log(req.body);
     const order = new Order(req.body);
+    // const URL = "http://localhost:3001/"+"product/amends";
+    //  (async () => {
+    //   try {
+    //     const response = await axios.post(URL, {purchasedItems: order.purchasedItems});
+    //     order.save( (err, saveRecord) => {
+    //       !err?res.json(saveRecord):res.send(err);
+    //     })
+    //   } catch (err) {
+    //     res.send(err);
+    //   }    
+    // })();
     order.save( (err, saveRecord) => {
-        !err?res.json(saveRecord):res.send(err);
+          !err?res.json(saveRecord):res.send(err);
     })
 });
 
-// router.get("/all", (req, res) => {
-//   Order.find({}, (err, foundRecords) => {
-//       if (err) {
-//           res.send(err);
-//       } else {
-//           (foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
-//       }
-//   })
-// });
+router.post("/status/:status", (req, res) => {
+  Order.findByIdAndUpdate(req.body._id, {status: req.params.status}, {new: true}, (err, updatedRec) => {
+    !err?res.json(updatedRec):res.send(err);
+  })
+})
+
 
 router.get("/all", (req,res) => {
   Order.find({})

@@ -38,7 +38,8 @@ function CartDialog(props) {
                 transactions.push({product: product._id, quantity: count, purchaseDate: new Date(), createDate: new Date()})
             })
             order.purchasedItems = transactions;
-            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/new`, order)
+            const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/new`, order);
+            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data);
         } catch (err) {
             console.log(err)
         }

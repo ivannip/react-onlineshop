@@ -12,6 +12,7 @@ import ProductBody from "./components/ProductBody";
 import CartDialog from "./components/CartDialog";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import OrderList from "./components/OrderList";
 import {UserContext} from "./context/UserContext";
 
 function App() {
@@ -102,7 +103,7 @@ function App() {
           <CartDialog shwCart={shwCart} hideCart={hideCart} />
         </TabPanel>
         <TabPanel header="Delivery">
-          Delivery
+            <OrderList />
         </TabPanel>
       </TabView>
     </div>
