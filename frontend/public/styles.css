@@ -39,13 +39,14 @@
   }
 
   .cart {
-    position: relative;
+    position: fixed;
+    right: 20px;
   }
 
   .cart_count {
     position: absolute;
-    top: 8px;
-    right: 10px;
+    top: 20px;
+    right: 0px;
     color: #fff;
     background: #ff3e6c;
     font-weight: 500;

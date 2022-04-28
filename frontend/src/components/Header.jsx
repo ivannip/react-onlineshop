@@ -16,8 +16,8 @@ function Header(props) {
                 <h1>Online Shop</h1>
                 <div className="cart">
                 <FaShoppingCart size="24" />
-                <span className="cart_count" >0</span>
-                {totalCount > 0 && <span className="cart_count" onClick={props.showCart}>{totalCount}</span>}
+                  <span className="cart_count" > 0 </span>
+                  {totalCount > 0 && <span className="cart_count" onClick={props.showCart}> {totalCount}</span>}
                 </div>
               </nav>
             </header>

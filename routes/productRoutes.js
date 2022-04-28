@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
+const Order = require("../models/order");
+const conn = require("../models/connection");
+const { update } = require("../models/product");
 
 //setup proxy for server client connection with diff ports, added for deployment in local nginx
 router.use((req, res, next) => {
@@ -54,19 +57,36 @@ router.patch("/update", (req, res) => {
     })
 });
 
-router.post("/amends" , (req, res) => {
-    const {purchasedItems} = req.body;
-    const _error = false
-    let quantity = 0;
-    purchasedItems.forEach(item => {
-        quantity = parseInt(item.quantity);
-        Product.findByIdAndUpdate(item.product, {$inc: {inventory: -quantity}}, (err, updated) => {
-            if (err) {
-                _error = true;
+
+router.post("/amends" , async (req, res) => { 
+        const {purchasedItems} = req.body;
+        let resultItems = [];
+        const session = await conn.startSession();
+        let quantity = 0;
+        let query = null;
+        try {
+            session.startTransaction()
+            for (const item of purchasedItems) {
+                quantity = parseInt(item.quantity);
+                query = {_id: item.product, inventory:{$gte:quantity}};
+                const doc = await Product.findOneAndUpdate(query, {$inc: {inventory: -quantity}}, {new: true, session});
+                (doc !== null)?resultItems.push(doc):"";
             }
-        })
-    });
-    _error?res.send("inventory change failed"):res.send("update success");
+            //console.log(resultItems);
+            if (resultItems.length === purchasedItems.length) {
+                await session.commitTransaction();
+            } else {
+                await session.abortTransaction();
+                resultItems = [];
+            }
+            session.endSession();      
+        } catch (transaction_err) {
+            await session.abortTransaction();
+            resultItems = [];
+            session.endSession();
+        }
+       res.json(resultItems); 
+             
 })
 
 module.exports = router;

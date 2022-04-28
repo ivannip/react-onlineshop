@@ -25,8 +25,9 @@ function ProductCard(props) {
                 <p className="m-0" style={{lineHeight: '1.5'}}>
                     {/* <img alt="Card" src={product.image} width="42" height="42" style={{float:'right'}} /> */}
                     {/* <FaShoppingCart size="24" style={{float:'right'}} onClick={props.addToCart}/> */}
-                    {product.description}
+                    {product.description}               
                 </p>
+                <p className="m-0" style={{lineHeight: '1.5'}}>Available Inventory: {product.inventory}</p>
             </Card>
 
         </div>

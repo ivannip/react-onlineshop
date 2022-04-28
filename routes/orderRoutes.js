@@ -1,7 +1,7 @@
 const express = require("express");
-const axios = require("axios");
 const Order = require("../models/order");
 const router = express.Router();
+
 
 //setup proxy for server client connection with diff ports, added for deployment in local nginx
 router.use((req, res, next) => {
@@ -41,17 +41,20 @@ router.post("/status/:status", (req, res) => {
 
 
 router.get("/all", (req,res) => {
-  Order.find({})
-  .populate(
-    {path: "purchasedItems.product", model: "product"})
-  .exec( (err, foundRecords) => {
-    if (err) {
-            console.log(err);
-            res.send(err);
-    } else {
-            (foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
-    }
-  })
+  
+    Order.find({})
+    .populate(
+      {path: "purchasedItems.product", model: "product"})
+    .exec( (err, foundRecords) => {
+      if (err) {
+              console.log(err);
+              res.send(err);
+      } else {
+              (foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
+      }
+    })
+    
+  
 })
 
 module.exports = router;

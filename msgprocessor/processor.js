@@ -54,8 +54,17 @@ async function consumeMessages(messagingChannel, queueName, handler) {
 
 async function processOrder(messagePayload) {
     try {
-         axios.post("http://localhost:3001/product/amends", messagePayload);
-         axios.post("http://localhost:3001/order/status/confirm", messagePayload);
+         const res = await axios.post("http://localhost:3001/product/amends", messagePayload);
+         console.log(res.data);
+         //if no purchased records are processed, refund the order
+         if (res.data.length === 0) {
+            console.log("call refund");
+            await axios.post("http://localhost:3001/order/status/refund", messagePayload);
+         } else {
+            console.log("call confirm");
+            await axios.post("http://localhost:3001/order/status/confirm", messagePayload);
+         }
+         
     } catch (err) {
         console.log(err);
     }
@@ -73,9 +82,9 @@ async function processOrder(messagePayload) {
                 
             await consumeMessages(messagingChannel, queueName,
                 messagePayload => {
-                    console.log("Received message on my-queue.");
-                    console.log("Payload: ");
-                    console.log(messagePayload);
+                    // console.log("Received message on my-queue.");
+                    // console.log("Payload: ");
+                    // console.log(messagePayload);
                     processOrder(messagePayload);
                 }
             );

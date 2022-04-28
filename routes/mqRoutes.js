@@ -32,9 +32,9 @@ let messagingChannel = null;
 // Emit a message.
 //
 function emitMessage(messagingChannel, queueName, messagePayload) {
-    console.log("Sending message to queue " + queueName);
-    console.log("Payload:");
-    console.log(messagePayload);
+    // console.log("Sending message to queue " + queueName);
+    // console.log("Payload:");
+    // console.log(messagePayload);
     messagingChannel.publish("", queueName, new Buffer(JSON.stringify(messagePayload)));
 }
 
