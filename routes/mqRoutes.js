@@ -14,9 +14,11 @@ router.use((req, res, next) => {
     next();
 });
 
-const messageHost = process.env.RABBITMQ_URL;
+//CLOUDAMQP_URL is the default URL for rabbitMQ in heroku
+const messageHost = process.env.CLOUDAMQP_URL;
 let messagingConnection = null;
 let messagingChannel = null;
+
 (
     async () => {
         try {

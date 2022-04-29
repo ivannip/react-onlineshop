@@ -52,9 +52,28 @@ router.get("/all", (req,res) => {
       } else {
               (foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
       }
-    })
-    
-  
+    })  
 })
+
+router.get("/confirm/:month/:year", (req, res) => {
+  const month = req.params.month - 1;
+  const year = req.params.year;
+  const _date = new Date(`${year}-01-01T00:00:00`);
+  const startDate = new Date(_date.setMonth(month));
+  const endDate = new Date(_date.setMonth(month+1));
+  //console.log({status: "confirmed", deliveryDate:{$gt: startDate, $lte: endDate} });
+  Order.find({status: "confirm", deliveryDate:{$gt: startDate, $lte: endDate} })
+  .populate(
+    {path: "purchasedItems.product", model: "product"})
+    .exec( (err, foundRecords) => {
+      if (err) {
+        console.log(err);
+        res.send(err);
+      } else {
+        //(foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
+        res.json(foundRecords);
+      }
+    });
+});
 
 module.exports = router;

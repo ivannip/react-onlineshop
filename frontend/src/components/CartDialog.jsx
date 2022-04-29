@@ -30,6 +30,25 @@ function CartDialog(props) {
         })
     }
 
+    // this processOrder function is copied from processor.js
+    async function processOrder(messagePayload) {
+        try {
+             
+             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}product/amends`, messagePayload);
+             //if no purchased records are processed, refund the order
+             if (res.data.length === 0) {
+                console.log("call refund");
+                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/refund`, messagePayload);
+             } else {
+                console.log("call confirm");
+                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/confirm`, messagePayload);
+             }
+             
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     const confirmOrder = async() => {
         try {
             const transactions = [];
@@ -38,8 +57,17 @@ function CartDialog(props) {
                 transactions.push({product: product._id, quantity: count, purchaseDate: new Date(), createDate: new Date()})
             })
             order.purchasedItems = transactions;
+            
             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/new`, order);
-            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data);
+            
+            // using rabbitmq to process the order
+            //await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data);
+
+            //direct process the database change without MQ
+            await processOrder(res.data);
+            
+
+            
         } catch (err) {
             console.log(err)
         }

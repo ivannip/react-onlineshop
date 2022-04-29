@@ -9,6 +9,7 @@ import {TabView, TabPanel} from "primereact/tabview";
 import {Button} from "primereact/button";
 import Header from "./components/Header";
 import ProductBody from "./components/ProductBody";
+import DeliveryBody from "./components/DeliveryBody";
 import CartDialog from "./components/CartDialog";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -102,8 +103,11 @@ function App() {
           <ProductBody />
           <CartDialog shwCart={shwCart} hideCart={hideCart} />
         </TabPanel>
-        <TabPanel header="Delivery">
+        <TabPanel header="List of Order">
             <OrderList />
+        </TabPanel>
+        <TabPanel header="Delivery">
+            <DeliveryBody />
         </TabPanel>
       </TabView>
     </div>

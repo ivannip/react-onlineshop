@@ -1,6 +1,9 @@
 const amqp = require("amqplib");
 const axios = require("axios");
 const {retry} = require("./retry");
+if (process.env.NODE_ENV !== "production") {
+    require("dotenv").config();
+}
 
 async function consumeMessages(messagingChannel, queueName, handler) {
     
@@ -52,17 +55,17 @@ async function consumeMessages(messagingChannel, queueName, handler) {
 //     );
 // };
 
-async function processOrder(messagePayload) {
+const processOrder = async(messagePayload) => {
     try {
-         const res = await axios.post("http://localhost:3001/product/amends", messagePayload);
-         console.log(res.data);
+         console.log(messagePayload);
+         const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}product/amends`, messagePayload);
          //if no purchased records are processed, refund the order
          if (res.data.length === 0) {
             console.log("call refund");
-            await axios.post("http://localhost:3001/order/status/refund", messagePayload);
+            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/refund`, messagePayload);
          } else {
             console.log("call confirm");
-            await axios.post("http://localhost:3001/order/status/confirm", messagePayload);
+            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/confirm`, messagePayload);
          }
          
     } catch (err) {
@@ -73,9 +76,11 @@ async function processOrder(messagePayload) {
 (
     async()=> {
         try {
-            const messageHost = process.env.RABBITMQ_URL;
-            const queueName = process.env.RABBITMQ_QUEUE_NAME || "myqueue"
+            //CLOUDAMQP_URL is the default URL for rabbitMQ in Heroku
 
+            const messageHost = process.env.CLOUDAMQP_URL;
+            const queueName = process.env.RABBITMQ_QUEUE_NAME || "myqueue"
+            
             const messagingConnection = await retry( () => amqp.connect(messageHost), 10, 5000);
             const messagingChannel = await messagingConnection.createChannel();
             await messagingChannel.assertQueue(queueName, {});
@@ -88,9 +93,11 @@ async function processOrder(messagePayload) {
                     processOrder(messagePayload);
                 }
             );
+            
             console.log("online");
         } catch (err) {
             console.log(err);
         }
     }
 ) (); 
+
