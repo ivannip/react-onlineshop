@@ -63,7 +63,7 @@ function CartDialog(props) {
             // using rabbitmq to process the order
             //await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data);
 
-            //direct process the database change without MQ
+            //direct process the database change without MQ, use this when deploy to Heroku
             await processOrder(res.data);
             
 
@@ -78,6 +78,7 @@ function CartDialog(props) {
 
     useEffect( () => {
         let userInfo = {name:"", mobile:"", address:""};
+        console.log(userContext.details);
         if (userContext.details.userInfo !== undefined) {
             userInfo = userContext.details.userInfo;
         }        

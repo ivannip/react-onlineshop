@@ -57,6 +57,13 @@ router.patch("/update", (req, res) => {
     })
 });
 
+//reset inventory
+router.patch("/resetInventory", (req, res) => {
+    Product.updateMany({}, {inventory: 120}, (err, result) => {
+        !err?res.send("update success"):res.send("Update failed");
+    })
+})
+
 
 router.post("/amends" , async (req, res) => { 
         const {purchasedItems} = req.body;

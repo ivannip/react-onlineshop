@@ -1,6 +1,5 @@
 .env
 .DS_Store
 node_modules
-*.jpg
 mynote
 *.png

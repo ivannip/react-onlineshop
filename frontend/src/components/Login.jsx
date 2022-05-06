@@ -36,6 +36,18 @@ function Login(props) {
     }
 
   }
+
+  //Initialize Database
+  async function resetAction(event) {
+    event.preventDefault();
+    try {
+      await axios.delete(process.env.REACT_APP_API_ENDPOINT+"order/deleteAll");
+      await axios.patch(process.env.REACT_APP_API_ENDPOINT+"product/resetInventory");
+      setError("Database Reset!");
+    } catch (err) {
+      
+    }
+  }
   
 
   return (
@@ -54,8 +66,10 @@ function Login(props) {
       </div>
     </div>
     <div className="field grid">
-      <Button label="Login" icon="pi pi-check" iconPos="right" onClick={loginAction}/>
+      <Button label="Login" className="p-button-rounded" icon="pi pi-check" iconPos="right" onClick={loginAction}/>
+      <Button label="Reset DB" className="p-button-rounded p-button-warning" onClick={resetAction} />
     </div>
+ 
     </div>
   )
 }

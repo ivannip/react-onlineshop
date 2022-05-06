@@ -118,6 +118,7 @@ router.post("/refreshToken", (req, res, next) => {
                 res.statusCode = 401
                 res.send("Unauthorized")
               } else {
+                const userInfo = {name: user.name, mobile: user.mobile, group: user.group, address: user.address};
                 const token = getToken({ _id: userId })
                 // If the refresh token exists, then create new one and replace it.
                 const newRefreshToken = getRefreshToken({ _id: userId })
@@ -128,7 +129,7 @@ router.post("/refreshToken", (req, res, next) => {
                     res.send(err)
                   } else {
                     res.cookie("refreshToken", newRefreshToken, COOKIE_OPTIONS)
-                    res.send({ success: true, token, userId })
+                    res.send({ success: true, token, userId, userInfo: userInfo })
                   }
                 })
               }

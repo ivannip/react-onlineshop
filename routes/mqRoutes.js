@@ -15,7 +15,7 @@ router.use((req, res, next) => {
 });
 
 //CLOUDAMQP_URL is the default URL for rabbitMQ in heroku
-const messageHost = process.env.CLOUDAMQP_URL;
+const messageHost = process.env.CLOUDAMQP_URL || "amqp://guest:guest@localhost:5672";
 let messagingConnection = null;
 let messagingChannel = null;
 
@@ -34,18 +34,19 @@ let messagingChannel = null;
 // Emit a message.
 //
 function emitMessage(messagingChannel, queueName, messagePayload) {
-    // console.log("Sending message to queue " + queueName);
-    // console.log("Payload:");
     // console.log(messagePayload);
-    messagingChannel.publish("", queueName, new Buffer(JSON.stringify(messagePayload)));
+    //messagingChannel.publish("", queueName, new Buffer(JSON.stringify(messagePayload)));
+    messagingChannel.publish("", queueName, Buffer.from(JSON.stringify(messagePayload)));
 }
 
 router.post("/sendOrder", (req, res) => {
     const order = req.body;
-    console.log(process.env.RABBITMQ_QUEUE_NAME);
+    //console.log(process.env.RABBITMQ_QUEUE_NAME);
+    const QUEUE_NAME = process.env.RABBITMQ_QUEUE_NAME || "myqueue";
+    console.log(QUEUE_NAME);
     ( async() => {
         try {
-            await emitMessage(messagingChannel, process.env.RABBITMQ_QUEUE_NAME, order);
+            await emitMessage(messagingChannel, QUEUE_NAME, order);
             res.send({messageSend: success});
         } catch (err) {
             res.send(err);

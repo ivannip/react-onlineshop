@@ -5,7 +5,7 @@ function sleep(timeMS) {
     });
 }
 
-async function retry(operation, maxAttempts, waitTimeMS) {
+exports.retry = async (operation, maxAttempts, waitTimeMS) => {
     let lastError;
 
     while (maxAttempts-- > 0) {
@@ -37,4 +37,4 @@ async function retry(operation, maxAttempts, waitTimeMS) {
     throw lastError;
 }    
 
-module.exports = { retry };
+//module.exports = { retry };

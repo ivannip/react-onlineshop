@@ -57,15 +57,16 @@ async function consumeMessages(messagingChannel, queueName, handler) {
 
 const processOrder = async(messagePayload) => {
     try {
-         console.log(messagePayload);
-         const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}product/amends`, messagePayload);
+         //console.log(messagePayload);
+         const ENDPOINT = process.env.REACT_APP_API_ENDPOINT || "http://localhost:3001/";
+         const res = await axios.post(`${ENDPOINT}product/amends`, messagePayload);
          //if no purchased records are processed, refund the order
          if (res.data.length === 0) {
             console.log("call refund");
-            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/refund`, messagePayload);
+            await axios.post(`${ENDPOINT}order/status/refund`, messagePayload);
          } else {
             console.log("call confirm");
-            await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/confirm`, messagePayload);
+            await axios.post(`${ENDPOINT}order/status/confirm`, messagePayload);
          }
          
     } catch (err) {
@@ -77,8 +78,7 @@ const processOrder = async(messagePayload) => {
     async()=> {
         try {
             //CLOUDAMQP_URL is the default URL for rabbitMQ in Heroku
-
-            const messageHost = process.env.CLOUDAMQP_URL;
+            const messageHost = process.env.CLOUDAMQP_URL || "amqp://guest:guest@localhost:5672";
             const queueName = process.env.RABBITMQ_QUEUE_NAME || "myqueue"
             
             const messagingConnection = await retry( () => amqp.connect(messageHost), 10, 5000);
@@ -87,9 +87,6 @@ const processOrder = async(messagePayload) => {
                 
             await consumeMessages(messagingChannel, queueName,
                 messagePayload => {
-                    // console.log("Received message on my-queue.");
-                    // console.log("Payload: ");
-                    // console.log(messagePayload);
                     processOrder(messagePayload);
                 }
             );
@@ -101,3 +98,28 @@ const processOrder = async(messagePayload) => {
     }
 ) (); 
 
+
+/**
+exports.startProcessor = async () => {
+    try {
+        //CLOUDAMQP_URL is the default URL for rabbitMQ in Heroku
+        const messageHost = process.env.CLOUDAMQP_URL || "amqp://guest:guest@localhost:5672";
+        const queueName = process.env.RABBITMQ_QUEUE_NAME || "myqueue"
+        
+        const messagingConnection = await retry( () => amqp.connect(messageHost), 10, 5000);
+        const messagingChannel = await messagingConnection.createChannel();
+        await messagingChannel.assertQueue(queueName, {});
+            
+        await consumeMessages(messagingChannel, queueName,
+            messagePayload => {
+                console.log(messagePayload);
+                processOrder(messagePayload);
+            }
+        );
+        
+        console.log("online");
+    } catch (err) {
+        console.log(err);
+    }
+}
+ */

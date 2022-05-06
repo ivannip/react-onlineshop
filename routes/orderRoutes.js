@@ -39,9 +39,13 @@ router.post("/status/:status", (req, res) => {
   })
 })
 
+router.delete("/deleteAll", (req, res) => {
+  Order.deleteMany({}, (err, result) => {
+    !err?res.send("Delete Success"):res.sendStatus(err);
+  })
+})
 
 router.get("/all", (req,res) => {
-  
     Order.find({})
     .populate(
       {path: "purchasedItems.product", model: "product"})
@@ -50,7 +54,7 @@ router.get("/all", (req,res) => {
               console.log(err);
               res.send(err);
       } else {
-              (foundRecords.length > 0)?res.json(foundRecords):res.send("No record found!");
+              res.json(foundRecords);
       }
     })  
 })
