@@ -7,7 +7,7 @@ function CartItem(props) {
     
     
     const changeQuantity = (e) => {      
-        props.updateCart(cartItem, e.value);
+        props.handleCartItemChange(cartItem, e.value);
     }
     
     return (

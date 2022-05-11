@@ -12,6 +12,9 @@ import { classNames } from 'primereact/utils';
 
     const [showMessage, setShowMessage] = useState(false);
     const [formData, setFormData] = useState({});
+    const {userContext, setUserContext} = useContext(UserContext);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showError, setShowError] = useState(false);
     const defaultValues = {
         name: '',
         username: '',        
@@ -40,9 +43,7 @@ import { classNames } from 'primereact/utils';
         </React.Fragment>
     );
 
-    const [userContext, setUserContext] = useContext(UserContext);
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [showError, setShowError] = useState(false);
+    
 
     const onSubmit = (data) => {
 

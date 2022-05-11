@@ -8,8 +8,10 @@ const path = require("path");
 
 const productRoute = require("./routes/productRoutes");
 const orderRoute = require("./routes/orderRoutes");
-const userRouter = require("./routes/userRoutes");
-const mqRouter = require("./routes/mqRoutes");
+const userRoute = require("./routes/userRoutes");
+
+//Route for RabbitMQ
+//const mqRouter = require("./routes/mqRoutes");
 
 
 const PORT = process.env.PORT || "3001";
@@ -31,11 +33,14 @@ require("./authenticate");
 
 //Setup Authorization route
 app.use(passport.initialize());
-app.use("/user", userRouter);
+app.use("/user", userRoute);
 
+//Setup Data Route
 app.use("/product", productRoute);
 app.use("/order", orderRoute);
-app.use("/msg", mqRouter);
+
+//setup RabbitMQ Route
+//app.use("/msg", mqRouter);
 
 
 if (process.env.NODE_ENV === "production") {

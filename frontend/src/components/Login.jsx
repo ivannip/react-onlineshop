@@ -8,7 +8,7 @@ import { Button } from 'primereact/button';
 function Login(props) {
 
   const [user, setUser] = useState({username:"", password:""});
-  const [userContext, setUserContext] = useContext(UserContext);
+  const {userContext, setUserContext} = useContext(UserContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 

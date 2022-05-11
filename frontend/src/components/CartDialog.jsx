@@ -19,8 +19,8 @@ function CartDialog(props) {
         deliveryAddress: "",
         purchasedItems: []
     }
-    const {cartItems, emptyCart, updateCart} = useContext(CartContext);
-    const [userContext, setUserContext] = useContext(UserContext); 
+    //const {cartItems, emptyCart, updateCart} = useContext(CartContext);
+    const {userContext, setUserContext, cartItems, emptyCart, updateCart} = useContext(UserContext); 
     const [order, setOrder] = useState(emptyOrder);
 
     const updateOrder = (e) => {
@@ -29,6 +29,7 @@ function CartDialog(props) {
             return {...previous, [name]: value};
         })
     }
+
 
     // this processOrder function is copied from processor.js
     async function processOrder(messagePayload) {
@@ -78,8 +79,7 @@ function CartDialog(props) {
 
     useEffect( () => {
         let userInfo = {name:"", mobile:"", address:""};
-        console.log(userContext.details);
-        if (userContext.details.userInfo !== undefined) {
+        if (userContext.details !== undefined && userContext.details.userInfo !== undefined) {
             userInfo = userContext.details.userInfo;
         }        
         setOrder( (prev) => {
@@ -102,7 +102,7 @@ function CartDialog(props) {
             {
                 cartItems.map( (item) => {
                     const {product, count} = item;
-                    return <CartItem cartItem={product} quantity={count} key={product._id} updateCart={updateCart}/>
+                    return <CartItem cartItem={product} quantity={count} key={product._id} handleCartItemChange={updateCart}/>
              })
             }
             </div>

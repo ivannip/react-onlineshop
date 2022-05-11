@@ -24,4 +24,4 @@ The Demo hosted in Heroku can be access by https://react-onlineshop0x.herokuapp.
     b) otherwise change the order status to "refund"
 8. Since I have not subscribed the RabbitMQ service in Heroku, the way of message queue is replaced.
 9. The Delivery Tab will show the confirmed orders in the Calendar, by the delivery date
-10. The ORder Tab will show all the orders
+10. The List of Order Tab will show all the orders

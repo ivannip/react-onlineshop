@@ -36,7 +36,7 @@ router.post("/register", (req, res, next) => {
                     const userId = savedUser._id;
                     const userInfo = {name: savedUser.name, mobile: savedUser.mobile, group: savedUser.group, address: savedUser.address};                 
                     res.cookie("refreshToken", refreshToken, COOKIE_OPTIONS);
-                    res.send({success: true, token, userId, userInfo:userInfo});
+                    res.send({success: true, token, userId, userInfo: userInfo});
                 }
             })
         }

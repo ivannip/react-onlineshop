@@ -3,12 +3,16 @@ import axios from "axios";
 import { Toast } from "primereact/toast";
 import ProductCard from "./ProductCard";
 
-import {CartContext} from "../context/CartContext";
+//import {CartContext} from "../context/CartContext";
+import {UserContext} from "../context/UserContext";
 
 function ProductBody() {
 
     const [products, setProducts] = useState([]);
-    const {addToCart} = useContext(CartContext);
+    //Cart by Context
+    const {addToCart} = useContext(UserContext);
+
+
     
     const toast = useRef(null);
     

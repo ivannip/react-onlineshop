@@ -1,8 +1,9 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 
 const CartContext = React.createContext();
 
 const CartProvider = props => {
+    
     const [cartItems, setCartItems] = useState([]);
 
     //insert new item or increment the count of item
@@ -31,6 +32,7 @@ const CartProvider = props => {
     //update the count of items in the cart from Cart Dialog
     const updateCart = (amendedProduct, amendedCount) => {
         console.log("call updateCart");
+        let updatedCartItems = [];
         setCartItems( (prev) => {
             const index = prev.findIndex( item => {
                 const {product} = item;
@@ -38,11 +40,11 @@ const CartProvider = props => {
                 const idb = product._id.valueOf();
                 return ida === idb});
             if (index === -1) {
-                return prev.push({product:amendedProduct, count: amendedCount});
-            } else {
-                    prev.splice(index, 1, {product:amendedProduct, count: amendedCount});
-                    return prev;
-            }           
+                updatedCartItems = prev.push({product:amendedProduct, count: amendedCount});
+            } else {                   
+                updatedCartItems = prev.splice(index, 1, {product:amendedProduct, count: amendedCount});
+            }
+            return updatedCartItems;           
         })
     }
 
@@ -52,11 +54,13 @@ const CartProvider = props => {
     }
 
     //inital read context from storage
-    useEffect( () => {
+    useEffect( () => {       
         const shoppingCart = JSON.parse(localStorage.getItem("shoppingCart"));
         if (shoppingCart) {
             setCartItems(shoppingCart);
         }
+        
+        
     }, []);
 
     //update to storage

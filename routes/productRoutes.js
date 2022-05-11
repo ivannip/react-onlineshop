@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
-const Order = require("../models/order");
 const conn = require("../models/connection");
-const { update } = require("../models/product");
+//const { update } = require("../models/product");
 
 //setup proxy for server client connection with diff ports, added for deployment in local nginx
 router.use((req, res, next) => {

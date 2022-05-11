@@ -19,7 +19,7 @@ import {UserContext} from "./context/UserContext";
 function App() {
 
   const [shwCart, setShwCart] = useState(false);
-  const [userContext, setUserContext] = useContext(UserContext);
+  const {userContext, setUserContext} = useContext(UserContext);
   
   const showCart = () => {
     setShwCart(true);
@@ -89,7 +89,7 @@ function App() {
         <TabPanel header="Login">
           <Login />
         </TabPanel>
-        <TabPanel header="User Registration">
+        <TabPanel header="User Registration" disabled>
           <Register />
         </TabPanel>
       </TabView>
@@ -103,11 +103,11 @@ function App() {
           <ProductBody />
           <CartDialog shwCart={shwCart} hideCart={hideCart} />
         </TabPanel>
-        <TabPanel header="List of Order">
-            <OrderList />
-        </TabPanel>
         <TabPanel header="Delivery">
             <DeliveryBody />
+        </TabPanel>
+        <TabPanel header="List of Order">
+            <OrderList />
         </TabPanel>
       </TabView>
     </div>
