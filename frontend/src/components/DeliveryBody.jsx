@@ -97,7 +97,8 @@ function DeliveryBody() {
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords}" rows={10} rowsPerPageOptions={[10,20,50]}
                         paginatorLeft={paginatorLeft} paginatorRight={paginatorRight}
                         expandedRows={expandedRows} onRowToggle={(e) => setExpandedRows(e.data)}
-                        rowExpansionTemplate={rowExpansionTemplate}>
+                        rowExpansionTemplate={rowExpansionTemplate}
+                        sortField="createDate" sortOrder={-1}>
                         <Column expander style={{ width: '3em' }} />
                         <Column field="customer" header="Customer" />
                         <Column field="contact" header="Contact" />

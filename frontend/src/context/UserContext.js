@@ -31,7 +31,6 @@ const UserProvider = (props) => {
 
     //update the count of items in the cart from Cart Dialog
     const updateCart = (amendedProduct, amendedCount) => {
-        console.log("call updateCart");
         let updatedCartItems = [];
         setCartItems( (prev) => {
             const index = prev.findIndex( item => {
@@ -48,7 +47,6 @@ const UserProvider = (props) => {
                 }                   
                 updatedCartItems = [...prev.slice(0, index), {product:amendedProduct, count: amendedCount}, ...prev.slice(index+1)];
             }
-            console.log(updatedCartItems);
             return updatedCartItems;           
         })
     }
