@@ -5,12 +5,14 @@ const UserContext = React.createContext({});
 const UserProvider = (props) => {
     const [userState, setUserState] = useState({});
     const [cartItems, setCartItems] = useState([]);
+    //userState is in a structure {success: boolean, token: string, userId: _id, userInfo: {}}
+    //cartItems is in a structure [{product: object, count: number}]
 
     //insert new item or increment the count of item
     const addToCart = (newItem) => {
         let updatedCartItems = [];
         setCartItems( previousCartItems => {
-            const index = previousCartItems.findIndex( item => {
+            const index = previousCartItems.findIndex( item => {  
                                                     const {product} = item;
                                                     const ida = product._id.valueOf()
                                                     const idb = newItem._id.valueOf();

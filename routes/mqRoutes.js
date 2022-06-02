@@ -1,18 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const amqp = require("amqplib");
+const setupProxy = require("./setupProxy");
 
 //setup proxy for server client connection with diff ports, added for deployment in local nginx
-router.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-    );
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
-    next();
-});
+router.use(setupProxy);
 
 //CLOUDAMQP_URL is the default URL for rabbitMQ in heroku
 const messageHost = process.env.CLOUDAMQP_URL || "amqp://guest:guest@localhost:5672";
