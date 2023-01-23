@@ -7,7 +7,7 @@ This online shopping website is to demonstrate my usage of the following technol
 5. Passport and JWT are used for the implementation of authentication
 
 Description of the website
-The Demo hosted in Heroku can be access by https://react-onlineshop0x.herokuapp.com/
+The Demo hosted in Render can be access by https://react-onlineshop0x.onrender.com
 
 1. Visitors could use the following users to login:
     a) harrywan@mail.com / abc123
@@ -22,6 +22,6 @@ The Demo hosted in Heroku can be access by https://react-onlineshop0x.herokuapp.
     b) check inventory
     c) if enough inventory, deduce the inventory by the number of ordered and then change the order status to "confirm"
     b) otherwise change the order status to "refund"
-8. Since I have not subscribed the RabbitMQ service in Heroku, the way of message queue is replaced.
+8. Since I have not subscribed the RabbitMQ service in Render, the way of message queue is replaced.
 9. The Delivery Tab will show the confirmed orders in the Calendar, by the delivery date
 10. The List of Order Tab will show all the orders
