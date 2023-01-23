@@ -76,7 +76,7 @@ function DeliveryBody() {
             const year = new Date(viewDate).getUTCFullYear();
             console.log(`${process.env.REACT_APP_API_ENDPOINT}order/confirm/${month}/${year}`);
             const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}order/confirm/${month}/${year}`);
-            setOrders(res.data);
+            setOrders(res.data.orders);
         }
 
         fetch();

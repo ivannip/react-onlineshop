@@ -30,7 +30,7 @@ function ProductBody() {
         const fetchProduct = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}product/all`);
-                setProducts(res.data);
+                setProducts(res.data.products);
             } catch (err) {
 
             }

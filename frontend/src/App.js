@@ -42,6 +42,7 @@ function App() {
   const verifyUser = useCallback( async() => {
     
     try {
+        console.log({Message: "Call refreshToken", DateTime: new Date()});
         let res = await axios.post(process.env.REACT_APP_API_ENDPOINT + "user/refreshToken")    
         const data = res.data;
         setUserContext((prev) => {
@@ -51,15 +52,20 @@ function App() {
       // call refreshToken every 5 minutes to renew the authentication token.
       setTimeout(verifyUser, 5 * 60 * 1000);
     } catch (err) {
-      console.log(err);
       setUserContext((prev) => {
         return { ...prev, token: null, details: undefined };
       });
+      throw err;
     }
   }, [setUserContext]);
   
   useEffect(() => {
-    verifyUser();
+    try {
+      verifyUser();
+    } catch (err) {
+      console.log(err);
+    }
+    
   }, [verifyUser]);
 
   

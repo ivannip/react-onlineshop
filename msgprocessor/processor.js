@@ -1,6 +1,8 @@
 const amqp = require("amqplib");
 const axios = require("axios");
 const {retry} = require("./retry");
+const logger = require("../logger");
+
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
 }
@@ -8,7 +10,7 @@ if (process.env.NODE_ENV !== "production") {
 async function consumeMessages(messagingChannel, queueName, handler) {
     
     function consumeCallback(msg) {
-        console.log("Handling" + queueName);
+        logger.debug("Handling" + queueName);
         const messagePayload = JSON.parse(msg.content.toString());
         
         try {
@@ -16,25 +18,25 @@ async function consumeMessages(messagingChannel, queueName, handler) {
             if (promise) {
                 promise.then(() => {
                         messagingChannel.ack(msg); //TODO: Need to understand how ack works.
-                        console.log(queueName + " async handler done.");
+                        logger.debug(queueName + " async handler done.");
                     })
                     .catch(err => {
-                        console.error(queueName + " async handler errored.");
-                        console.error(err && err.stack || err);
+                        logger.error(queueName + " async handler errored.");
+                        logger.error(err && err.stack || err);
                     });
             }
             else {
                 messagingChannel.ack(msg);
-                console.log(queueName + " handler done.");
+                logger.debug(queueName + " handler done.");
             }
         }
         catch (err) {
-            console.error(queueName + " handler errored.");
-            console.error(err && err.stack || err);
+            logger.error(queueName + " handler errored.");
+            logger.error(err && err.stack || err);
         }
     };
 
-    console.log("Receiving messages for queue " + queueName);
+    logger.info("Receiving messages for queue " + queueName);
     await messagingChannel.consume(queueName, consumeCallback);
 };
 
@@ -62,15 +64,15 @@ const processOrder = async(messagePayload) => {
          const res = await axios.post(`${ENDPOINT}product/amends`, messagePayload);
          //if no purchased records are processed, refund the order
          if (res.data.length === 0) {
-            console.log("call refund");
+            logger.debug("call refund");
             await axios.post(`${ENDPOINT}order/status/refund`, messagePayload);
          } else {
-            console.log("call confirm");
+            logger.debug("call confirm");
             await axios.post(`${ENDPOINT}order/status/confirm`, messagePayload);
          }
          
     } catch (err) {
-        console.log(err);
+        logger.error(err);
     }
 }
 

@@ -3,16 +3,19 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
-const conn = require("./models/connection");
+const {connectDB} = require("./models/connection");
 const path = require("path");
 
 const productRoute = require("./routes/productRoutes");
 const orderRoute = require("./routes/orderRoutes");
 const userRoute = require("./routes/userRoutes");
 
+const logger = require("./logger");
+
 //Route for RabbitMQ
 //const mqRouter = require("./routes/mqRoutes");
 
+connectDB();
 
 const PORT = process.env.PORT || "3001";
 mongoose.Promise = global.Promise;
@@ -53,6 +56,6 @@ if (process.env.NODE_ENV === "production") {
 
 
 app.listen(PORT, () => {
-    console.log(`Server is listening to ${PORT}`)
+  logger.info(`Server is listening to ${PORT}`);  
 });
 

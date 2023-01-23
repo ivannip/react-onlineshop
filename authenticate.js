@@ -13,7 +13,7 @@ exports.COOKIE_OPTIONS = {
     maxAge: 2592000*1000,
     sameSite: "Lax",
   }
-  
+  //sign-in with payload, key, options
   exports.getToken = user => {
     return jwt.sign(user, process.env.JWT_SECRET, {
       expiresIn: eval(process.env.SESSION_EXPIRY),

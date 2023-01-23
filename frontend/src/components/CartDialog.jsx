@@ -32,17 +32,17 @@ function CartDialog(props) {
 
 
     // this processOrder function is copied from processor.js
-    async function processOrder(messagePayload) {
+    async function processOrder(order) {
         try {
              
-             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}product/amends`, messagePayload);
+             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}product/amends`, order);
              //if no purchased records are processed, refund the order
-             if (res.data.length === 0) {
+             if (res.data.products.length === 0) {
                 console.log("call refund");
-                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/refund`, messagePayload);
+                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/refund`, order);
              } else {
                 console.log("call confirm");
-                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/confirm`, messagePayload);
+                await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/status/confirm`, order);
              }
              
         } catch (err) {
@@ -62,10 +62,10 @@ function CartDialog(props) {
             const res = await axios.post(`${process.env.REACT_APP_API_ENDPOINT}order/new`, order);
             
             // using rabbitmq to process the order
-            //await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data);
+            //await axios.post(`${process.env.REACT_APP_API_ENDPOINT}msg/sendOrder`, res.data.order);
 
             //direct process the database change without MQ, use this when deploy to Heroku
-            await processOrder(res.data);
+            await processOrder(res.data.order);
             
 
             

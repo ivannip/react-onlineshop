@@ -1,0 +1,31 @@
+{
+    "products": [
+    {
+      "name": "Straight Leg Crop",
+      "price": 105,
+      "inventory": 120,
+      "unitOfPackage": "pairs",
+      "__v": 0,
+      "description": "Brown, causal wear",
+      "image": "images/straight-leg-crop.jpg"
+    },
+    {
+      "name": "Pants",
+      "description": "Good for beach",
+      "price": 105,
+      "inventory": 120,
+      "image": "images/pants.jpg",
+      "unitOfPackage": "pairs",
+      "__v": 0
+    },
+    {
+      "name": "Limited Wear",
+      "description": "Pilot",
+      "price": 100,
+      "inventory": 120,
+      "image": "images/straight-leg-crop.jpg",
+      "unitOfPackage": "pairs",
+      "__v": 0
+    }
+    ]
+}

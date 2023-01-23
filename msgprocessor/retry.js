@@ -1,4 +1,6 @@
 
+const logger = require("../logger");
+
 function sleep(timeMS) {
     return new Promise((resolve, reject) => {
         setTimeout(() => resolve(), timeMS);
@@ -21,7 +23,7 @@ exports.retry = async (operation, maxAttempts, waitTimeMS) => {
                 //console.warn(err && err.stack || err);
             }
             else {
-                console.error("Operation failed, no more retries allowed.");
+                logger.error("Operation failed, no more retries allowed.");
             }
 
             lastError = err;

@@ -53,7 +53,7 @@ function OrderList() {
         const fetchOrders = async () => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_API_ENDPOINT}order/all`);
-                setOrders(res.data);
+                setOrders(res.data.orders);
             } catch (err) {
                 console.log(err);
             }

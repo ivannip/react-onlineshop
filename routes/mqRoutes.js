@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const amqp = require("amqplib");
 const setupProxy = require("./setupProxy");
+const logger = require("../logger");
 
 //setup proxy for server client connection with diff ports, added for deployment in local nginx
 router.use(setupProxy);
@@ -17,7 +18,7 @@ let messagingChannel = null;
             messagingConnection = await amqp.connect(messageHost);
             messagingChannel = await messagingConnection.createChannel();
         } catch (err) {
-            console.log(err);
+            logger.error(err);
         }
     }
 )();
@@ -35,12 +36,13 @@ router.post("/sendOrder", (req, res) => {
     const order = req.body;
     //console.log(process.env.RABBITMQ_QUEUE_NAME);
     const QUEUE_NAME = process.env.RABBITMQ_QUEUE_NAME || "myqueue";
-    console.log(QUEUE_NAME);
+    logger.debug(QUEUE_NAME);
     ( async() => {
         try {
             await emitMessage(messagingChannel, QUEUE_NAME, order);
             res.send({messageSend: success});
         } catch (err) {
+            logger.error(err);
             res.send(err);
         }
     })();    
