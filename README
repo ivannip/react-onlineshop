@@ -13,7 +13,7 @@ The Demo hosted in Render can be access by https://react-onlineshop0x.onrender.c
     a) harrywan@mail.com / abc123
     b) kerrywan@mail.com / abc123
 2. The initialize button is to reset the inventory and clear all the orders
-3. The user registration function is disbaled in HeroKu
+3. The user registration function is disbaled in Render
 4. The website has three default product, the user could order as many as they want.
 5. The ordered products are stored in the shopping cart which could be visit by clicking the number in the top right corner.
 6. The ordered products could be check-out by click checkout button in the shopping Cart. If there is enough inventory, the order status will become "Confirm", otherwise will be "Refund".
